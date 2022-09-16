@@ -1,5 +1,6 @@
 import bikes
 
+
 print("Test 1:", bikes.distance_of_user("user123"))
 print("Test 2:", bikes.speed_of_user("user123"))
 print("Test 3:", bikes.duration_in_each_city("2021-06-01"))
