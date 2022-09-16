@@ -34,11 +34,19 @@ def duration_in_each_city(day: str):
 
 def users_in_city(city: str):
 
-    return None
+    data = sqlite3.connect("bikes.db")
+    data.isolation_level = None
+    cur = data.cursor()
+    users = cur.execute(f"SELECT COUNT(DISTINCT T.user_id) \
+                        FROM Stops S JOIN Cities C ON S.city_id = C.id \
+                        JOIN Trips T ON S.id = T.from_id \
+                        WHERE C.name = '{city}'").fetchone()
+    return users[0]
+
 
 def trips_on_each_day(city: str):
 
-    return None
+    data = sqlite3.connect("bikes.db")
 
 def most_popular_start(city: str):
 
