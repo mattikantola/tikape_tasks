@@ -33,3 +33,25 @@ courses.create_group("Basic-koodarit", [t2, t3], [s1, s2, s3])
 courses.create_group("Cobol-koodarit", [t1], [s2, s4])
 courses.create_group("Fortran-koodarit", [t1, t2, t3, t4, t5], [s1, s2, s3, s4, s5])
 courses.create_group("PHP-koodarit", [t4, t5], [s3])
+
+print(courses.courses_by_teacher("Leena Salmela"))
+#print(courses.credits_by_teacher("Leena Salmela"))
+print(courses.courses_by_student("Esko Ukkonen"))
+
+print(courses.credits_by_year(2020))
+print(courses.credits_by_year(2021))
+print(courses.credits_by_year(2022))
+
+print(courses.grade_distribution("Ohjelmoinnin perusteet"))
+print(courses.grade_distribution("Tietokoneen toiminta"))
+
+'''
+
+print(courses.course_list())
+print(courses.teacher_list())
+
+print(courses.group_people("Basic-koodarit"))
+print(courses.credits_in_groups())
+print(courses.common_groups("Antti Laaksonen", "Otto Nurmi"))
+
+'''
