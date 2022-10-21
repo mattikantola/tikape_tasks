@@ -119,13 +119,12 @@ def grade_distribution(course_name: str):
 
     cursor = db.cursor()
     distribution = cursor.execute(f"SELECT S.arvosana FROM Suoritukset S LEFT JOIN Kurssit K ON S.kurssi_id = K.tunnus WHERE K.nimi = '{course_name}' ORDER BY S.arvosana;").fetchall()
-    grades = [elem[0] for elem in distribution]
-    
-    grade_dict = {1:0, 2:0, 3:0, 4:0, 5:0}
 
-    for grade in grades:
 
-        grade_dict[grade] += 1
+    return distribution
 
-    return grade_dict
+def course_list():
 
+    cursor = db.cursor()
+    courselist = cursor.execute("SELECT K.nimi, COUNT(S.opiskelija_id) FROM Kurssit K LEFT JOIN Suoritukset S ON S.kurssi_id = K.tunnus GROUP BY S.kurssi_id;").fetchall()
+    return courselist

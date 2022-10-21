@@ -45,13 +45,11 @@ print(courses.credits_by_year(2022))
 print(courses.grade_distribution("Ohjelmoinnin perusteet"))
 print(courses.grade_distribution("Tietokoneen toiminta"))
 
-'''
-
 print(courses.course_list())
+'''
 print(courses.teacher_list())
 
 print(courses.group_people("Basic-koodarit"))
 print(courses.credits_in_groups())
 print(courses.common_groups("Antti Laaksonen", "Otto Nurmi"))
-
 '''
