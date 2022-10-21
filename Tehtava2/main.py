@@ -20,6 +20,7 @@ s3 = courses.create_student("Otto Nurmi")
 s4 = courses.create_student("Esko Ukkonen")
 s5 = courses.create_student("Arto Wikla")
 
+'''
 courses.add_credits(s1, c2, "2020-06-01", 5)
 courses.add_credits(s1, c3, "2021-01-08", 3)
 courses.add_credits(s2, c5, "2022-03-23", 2)
@@ -35,7 +36,7 @@ courses.create_group("Fortran-koodarit", [t1, t2, t3, t4, t5], [s1, s2, s3, s4, 
 courses.create_group("PHP-koodarit", [t4, t5], [s3])
 
 print(courses.courses_by_teacher("Leena Salmela"))
-#print(courses.credits_by_teacher("Leena Salmela"))
+print(courses.credits_by_teacher("Leena Salmela"))
 print(courses.courses_by_student("Esko Ukkonen"))
 
 print(courses.credits_by_year(2020))
@@ -46,7 +47,6 @@ print(courses.grade_distribution("Ohjelmoinnin perusteet"))
 print(courses.grade_distribution("Tietokoneen toiminta"))
 
 print(courses.course_list())
-'''
 print(courses.teacher_list())
 
 print(courses.group_people("Basic-koodarit"))
