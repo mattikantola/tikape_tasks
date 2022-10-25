@@ -187,29 +187,6 @@ def group_people(group_name: str):
 def common_groups(teacher_name: str, student_name: str):
 
     cur = db.cursor()
-    opettajan_ryhmat = cur.execute(f"SELECT DISTINCT J.ryhma_id FROM Ryhman_jasenet J LEFT JOIN Opettajat O ON O.id = J.opettaja_id WHERE O.nimi = '{teacher_name}' ORDER BY J.ryhma_id;").fetchall()
-    opiskelijan_ryhmat = cur.execute(f"SELECT DISTINCT J.ryhma_id FROM Ryhman_jasenet J LEFT JOIN Opiskelijat O ON O.id = J.opiskelija_id WHERE O.nimi = '{student_name}' ORDER BY J.ryhma_id").fetchall()
-    opettajan_ryhmat = [ope[0] for ope in opettajan_ryhmat]
-    opiskelijan_ryhmat = [opis[0] for opis in opiskelijan_ryhmat]
-
-    yhteiset = []
-    jjj = 0
-
-    for iii in range(min(len(opiskelijan_ryhmat), len(opettajan_ryhmat))):
-
-        if opettajan_ryhmat[jjj] == opiskelijan_ryhmat[iii]:
-
-            yhteiset.append(opettajan_ryhmat[jjj])
-
-        jjj += 1
-
-    result = []
-
-    for iii in yhteiset:
-
-        ryhma = cur.execute(f"SELECT nimi FROM Ryhmat WHERE id = {iii}").fetchone()
-
-        result.append(ryhma[0])
-
-    return sorted(result)
+    groups = cur.execute(f"SELECT R.nimi FROM Ryhmat R, Opettajat A, Opiskelijat B, Ryhman_jasenet RJ WHERE R.id = RJ.ryhma_id AND RJ.opettaja_id = A.id AND RJ.opiskelija_id = B.id AND A.nimi = '{teacher_name}' AND B.nimi = '{student_name}' ORDER BY R.nimi ").fetchall()
+    return [group[0] for group in groups]
     
