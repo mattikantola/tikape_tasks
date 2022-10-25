@@ -99,7 +99,7 @@ def courses_by_teacher(teacher_name: str):
 def credits_by_teacher(teacher_name: str):
 
     cur = db.cursor()
-    credits = cur.execute(f"SELECT SUM(K.pisteet) FROM Kurssit K LEFT JOIN Suoritukset S ON S.kurssi_id = K.id LEFT JOIN Kurssin_opettajat KO ON K.id = KO.opettaja_id WHERE KO.opettaja_id = (SELECT id FROM Opettajat WHERE nimi = '{teacher_name}');").fetchall()
+    credits = cur.execute(f"SELECT SUM(K.pisteet) FROM Kurssit K, Suoritukset S, Kurssin_opettajat KO WHERE KO.opettaja_id = (SELECT id FROM Opettajat WHERE nimi = '{teacher_name}') AND S.kurssi_id = K.id AND KO.kurssi_id = K.id;").fetchall()
     return credits[0][0]
 
 def courses_by_student(student_name: str):
@@ -139,3 +139,77 @@ def course_list():
     opiskelijoiden_maarat = [opis[1] for opis in opiskelijat]
 
     return list(zip(nimet, opettajien_maarat, opiskelijoiden_maarat))
+
+def teacher_list():
+
+    cursor = db.cursor()
+
+    opettajat = cursor.execute("SELECT O.nimi FROM Opettajat O ORDER BY O.nimi;").fetchall()
+    opettajat = [opettaja[0] for opettaja in opettajat]
+
+    data = []
+
+    for opettaja in opettajat:
+
+        cursor2 = db.cursor()
+        ope_id = cursor2.execute(f"SELECT id FROM Opettajat WHERE nimi = '{opettaja}';").fetchone()[0]
+
+        cursor2 = db.cursor()
+        ryhmat = cursor2.execute(f"SELECT K.nimi FROM Kurssit K LEFT JOIN Kurssin_opettajat KO ON K.id = KO.kurssi_id WHERE KO.opettaja_id = {ope_id} ORDER BY K.nimi;").fetchall()
+        ryhmat = [ryhma[0] for ryhma in ryhmat]
+
+        new_data = opettaja, ryhmat
+        data.append(new_data)
+
+    return data
+
+def group_people(group_name: str):
+
+    cursor = db.cursor()
+
+    ryhma_id = cursor.execute(f"SELECT id FROM Ryhmat WHERE nimi = '{group_name}'").fetchone()[0]
+
+    cursor = db.cursor()
+
+    opettajat = cursor.execute(f"SELECT DISTINCT O.nimi FROM Opettajat O LEFT JOIN Ryhman_jasenet RJ ON RJ.opettaja_id = O.id WHERE RJ.ryhma_id = {ryhma_id};").fetchall()
+
+    opettajat = [ope[0] for ope in opettajat]
+
+    opiskelijat = cursor.execute(f"SELECT DISTINCT O.nimi FROM Opiskelijat O LEFT JOIN Ryhman_jasenet RJ ON RJ.opiskelija_id = O.id WHERE RJ.ryhma_id = {ryhma_id};").fetchall()
+
+    opiskelijat = [opis[0] for opis in opiskelijat]
+
+    opettajat.extend(opiskelijat)
+    opettajat.sort()
+
+    return opettajat
+
+def common_groups(teacher_name: str, student_name: str):
+
+    cur = db.cursor()
+    opettajan_ryhmat = cur.execute(f"SELECT DISTINCT J.ryhma_id FROM Ryhman_jasenet J LEFT JOIN Opettajat O ON O.id = J.opettaja_id WHERE O.nimi = '{teacher_name}' ORDER BY J.ryhma_id;").fetchall()
+    opiskelijan_ryhmat = cur.execute(f"SELECT DISTINCT J.ryhma_id FROM Ryhman_jasenet J LEFT JOIN Opiskelijat O ON O.id = J.opiskelija_id WHERE O.nimi = '{student_name}' ORDER BY J.ryhma_id").fetchall()
+    opettajan_ryhmat = [ope[0] for ope in opettajan_ryhmat]
+    opiskelijan_ryhmat = [opis[0] for opis in opiskelijan_ryhmat]
+
+    yhteiset = []
+    jjj = 0
+
+    for iii in range(min(len(opiskelijan_ryhmat), len(opettajan_ryhmat))):
+
+        if opettajan_ryhmat[jjj] == opiskelijan_ryhmat[iii]:
+
+            yhteiset.append(opettajan_ryhmat[jjj])
+
+        jjj += 1
+
+    result = []
+
+    for iii in yhteiset:
+
+        ryhma = cur.execute(f"SELECT nimi FROM Ryhmat WHERE id = {iii}").fetchone()
+
+        result.append(ryhma[0])
+
+    return sorted(result)
+    

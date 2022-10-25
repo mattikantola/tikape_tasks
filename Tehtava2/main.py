@@ -35,7 +35,7 @@ courses.create_group("Fortran-koodarit", [], [s5])
 courses.create_group("PHP-koodarit", [t1, t2, t3], [s2, s3, s4, s5])
 
 print(courses.courses_by_teacher("Leena Salmela"))
-#print(courses.credits_by_teacher("Leena Salmela"))
+print(courses.credits_by_teacher("Leena Salmela"))
 print(courses.courses_by_student("Esko Ukkonen"))
 
 print(courses.credits_by_year(2020))
@@ -46,8 +46,8 @@ print(courses.grade_distribution("Ohjelmoinnin perusteet"))
 print(courses.grade_distribution("Tietokoneen toiminta"))
 
 print(courses.course_list())
-#print(courses.teacher_list())
+print(courses.teacher_list())
 
-#print(courses.group_people("Basic-koodarit"))
+print(courses.group_people("Basic-koodarit"))
 #print(courses.credits_in_groups())
-#print(courses.common_groups("Antti Laaksonen", "Otto Nurmi"))
+print(courses.common_groups("Antti Laaksonen", "Otto Nurmi"))
